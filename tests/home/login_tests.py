@@ -6,7 +6,7 @@ import unittest
 
 class LoginTest(unittest.TestCase):
 
-    def login(self):
+    def test_login(self):
         # The following section sets up Webdriver and implicit wait
         options = FirefoxOptions()
         options.binary_location = r"D:\Firefox\firefox.exe"
@@ -29,5 +29,3 @@ class LoginTest(unittest.TestCase):
             print("Login failed")
 
         driver.close()
-
-#LoginTest().login()
