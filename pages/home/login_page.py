@@ -1,9 +1,10 @@
 from selenium.webdriver.common.by import By
+from base.se_driver import SeDriver
 
-
-class LoginPage:
+class LoginPage(SeDriver):
 
     def __init__(self, driver):
+        super().__init__(driver)
         self.driver = driver
 
     # Locator variables; using @id first for better (faster) performance below
@@ -12,33 +13,16 @@ class LoginPage:
     _password_field = "login-password"
     _login_button = "login"
 
-    # Locator methods
-    def locate_login_link(self):
-        return self.driver.find_element(By.XPATH, self._sign_in_button)
-
-    def locate_email_field(self):
-        return self.driver.find_element(By.XPATH, self._email_field)
-
-    def locate_password_field(self):
-        return self.driver.find_element(By.ID, self._password_field)
-
-    def locate_login_button(self):
-        return self.driver.find_element(By.ID, self._login_button)
-
     # Action methods
     def click_sign_in_button(self):
-        self.locate_login_link().click()
-
+        self.click_on_element(self._sign_in_button, locator_type="xpath")
     def enter_username(self, email):
-        self.locate_email_field().send_keys(email)
-
+        self.enter_text(email, self._email_field, locator_type="xpath")
     def enter_password(self, password):
-        self.locate_password_field().send_keys(password)
-
+        self.enter_text(password, self._password_field)
     def click_login_button(self):
-        self.locate_login_button().click()
+        self.click_on_element(self._login_button)
 
-    # Login method
     def login(self, email, password):
         self.click_sign_in_button()
         self.enter_username(email)
