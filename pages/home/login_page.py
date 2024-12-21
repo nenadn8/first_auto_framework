@@ -1,7 +1,10 @@
-from selenium.webdriver.common.by import By
 from base.se_driver import SeDriver
+import utilities.project_logger as project_logger
+import logging
 
 class LoginPage(SeDriver):
+
+    log = project_logger.project_logger(logging.DEBUG)
 
     def __init__(self, driver):
         super().__init__(driver)
