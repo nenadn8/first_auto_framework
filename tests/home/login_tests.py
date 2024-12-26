@@ -1,32 +1,32 @@
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions
-from selenium.webdriver.common.by import By
 from pages.home.login_page import LoginPage
 import unittest
+import pytest
 
 class LoginTest(unittest.TestCase):
 
-    def test_login(self):
-        # Webdriver and implicit wait setup
-        options = FirefoxOptions()
-        options.binary_location = r"D:\Firefox\firefox.exe"
-        driver = webdriver.Firefox(options = options)
-        driver.implicitly_wait(5)  # seconds
+    # Set-up operations
+    options = FirefoxOptions()
+    options.binary_location = r"D:\Firefox\firefox.exe"
+    driver = webdriver.Firefox(options=options)
+    driver.maximize_window()
+    driver.implicitly_wait(5)  # seconds
+    home_page = "https://www.letskodeit.com/"
+    login_page = LoginPage(driver)
 
-        # Set-up operations
-        home_page = "https://www.letskodeit.com/"
-        driver.maximize_window()
-        driver.get(home_page)
+    @pytest.mark.run(order=2)
+    def test_valid_login(self):
+        self.driver.get(self.home_page)
+        self.login_page.login("lijir81011@exoular.com", "t3st!!")
+        login_successful_result = self.login_page.login_successful()
+        assert login_successful_result == True
 
-        # Login
-        login_page = LoginPage(driver)
-        login_page.login("lijir81011@exoular.com", "t3st!!")
+        self.driver.close()
 
-        # Asserts if sign-in was successful
-        profile_icon = driver.find_element(By.XPATH, "//button[@id='dropdownMenu1']//img[@class='zl-navbar-rhs-img ']")
-        if profile_icon is not None:
-            print("Login successful")
-        else:
-            print("Login failed")
-
-        driver.close()
+    @pytest.mark.run(order=1)
+    def test_invalid_login(self):
+        self.driver.get(self.home_page)
+        self.login_page.login("lijir81011@exoular.com", "wrong_password")
+        login_failed_result = self.login_page.login_failed()
+        assert login_failed_result == True

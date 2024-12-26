@@ -15,6 +15,9 @@ class LoginPage(SeDriver):
     _email_field = "//div[@id='page']//input[@placeholder='Email Address']"
     _password_field = "login-password"
     _login_button = "login"
+    _login_fail_messages = ("//span[contains(text(), 'The email field is required.') or "
+                            "contains(text(), 'The email must be a valid email address.') or "
+                            "contains(text(), 'The password field is required.') or text()='Incorrect login details']")
 
     # Action methods
     def click_sign_in_button(self):
@@ -26,8 +29,18 @@ class LoginPage(SeDriver):
     def click_login_button(self):
         self.click_on_element(self._login_button)
 
-    def login(self, email, password):
+    def login(self, email="", password=""):
         self.click_sign_in_button()
         self.enter_username(email)
         self.enter_password(password)
         self.click_login_button()
+
+    def login_successful(self):
+        login_check = self.is_element_present("//button[@id='dropdownMenu1']//img[@class='zl-navbar-rhs-img ']",
+                                         locator_type="xpath")
+        return login_check
+
+    def login_failed(self):
+        self.wait_for_element(self._login_fail_messages, locator_type="xpath")
+        login_fail_check = self.is_element_present(self._login_fail_messages, locator_type="xpath")
+        return login_fail_check
