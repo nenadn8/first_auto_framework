@@ -21,12 +21,16 @@ class LoginPage(SeDriver):
 
     # Action methods
     def click_sign_in_button(self):
+        self.wait_for_element(self._sign_in_button, locator_type="xpath")
         self.click_on_element(self._sign_in_button, locator_type="xpath")
     def enter_username(self, email):
+        self.wait_for_element(self._email_field, locator_type="xpath")
         self.enter_text(email, self._email_field, locator_type="xpath")
     def enter_password(self, password):
+        self.wait_for_element(self._password_field)
         self.enter_text(password, self._password_field)
     def click_login_button(self):
+        self.wait_for_element(self._login_button)
         self.click_on_element(self._login_button)
 
     def login(self, email="", password=""):
