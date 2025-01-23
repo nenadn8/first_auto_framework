@@ -1,3 +1,5 @@
+import time
+
 from base.se_driver import SeDriver
 import utilities.project_logger as project_logger
 import logging
@@ -31,10 +33,17 @@ class LoginPage(SeDriver):
         self.enter_text(password, self._password_field)
     def click_login_button(self):
         self.wait_for_element(self._login_button)
+        time.sleep(1)
         self.click_on_element(self._login_button)
 
     def login(self, email="", password=""):
-        self.click_sign_in_button()
+        email_field = self.get_element(self._email_field, locator_type="xpath")
+        password_field = self.get_element(self._password_field)
+        if email_field:
+            email_field.clear()
+            password_field.clear()
+        else:
+            self.click_sign_in_button()
         self.enter_username(email)
         self.enter_password(password)
         self.click_login_button()
